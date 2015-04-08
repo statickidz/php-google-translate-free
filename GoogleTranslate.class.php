@@ -8,7 +8,9 @@ class GoogleTranslate {
 
   public function translate($word) {
       $word = urlencode($word);
-      $url = 'http://translate.google.com/translate_a/t?client=t&text='.$word.'&hl='.$this->source.'&sl='.$this->source.'&tl='.$this->target.'&ie=UTF-8&oe=UTF-8&multires=1&otf=1&ssel=3&tsel=3&sc=1';      $name_en = $this->curl($url);      $name_en = explode('"',$name_en);
+      $url = 'https://translate.google.com/translate_a/single?client=t&sl='.$this->source.'&tl='.$this->target.'&hl='.$this->target.'-419&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&tk=519235|682612&q='.$word;
+      $name_en = $this->curl($url);
+      $name_en = explode('"',$name_en);
       return  $name_en[1];
   }
 
