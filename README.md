@@ -1,4 +1,4 @@
-# node-google-translate-free
-PHP class to use the Google Translator API witout pay, enjoy.
+# php-google-translate-free
+Simple PHP library for talking to Google's Translate API for free.
 
 Live example here: https://statickidz.com/proyectos/traductor-google-api-php-gratis/
