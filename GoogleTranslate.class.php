@@ -1,43 +1,91 @@
 <?php
-class GoogleTranslate {
 
-  public function __construct($source = 'es', $target = 'en') {
-      $this->source = $source;
-      $this->target = $target;
-  }
+class GoogleTranslate
+{
 
-  public function translate($word) {
-      $word = urlencode($word);
-      $url = 'https://translate.google.com/translate_a/single?client=t&sl='.$this->source.'&tl='.$this->target.'&hl='.$this->target.'-419&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&tk=519235|682612&q='.$word;
-      $name_en = $this->curl($url);
-      $name_en = explode('"',$name_en);
-      return  $name_en[1];
-  }
+    /**
+     * @param string $source
+     * @param string $target
+     * @param string $text
+     * @return string
+     */
+    public static function translate($source, $target, $text) {
 
-  private function curl($url,$params = array(), $is_cookie_set = false) {
-    if(!$is_cookie_set){
-        $ckfile = tempnam ("/tmp", "CURLCOOKIE");
-        $ch = curl_init ($url);
-        curl_setopt ($ch, CURLOPT_COOKIEJAR, $ckfile);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec ($ch);
+        // construct full request URL
+        $fullUrl = "https://translate.google.com/translate_a/single?"
+        . "client=t&"
+        . "sl=" . $source
+        . "&tl=" . $target
+        . "&hl=" . $target
+        . "&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t"
+        . "&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0"
+        . "&tk=" . self::getRandomToken()
+        . "&q=" . urlencode($text);
+
+        // get url content
+        $response = self::getUrl($fullUrl);
+
+        // clean translation
+        $cleanTranslation = self::cleanTranslation($response);
+
+        // extract translation info
+        $dotCount = substr_count($text, ".");
+        $result = "";
+        if($dotCount == 0) {
+            $result .= $cleanTranslation[0];
+        } else {
+            for($i=0; $i<=$dotCount*2; $i++) {
+                if($cleanTranslation[$i] != $source)
+                    $result .= $cleanTranslation[$i];
+                $i = $i + 1;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $url
+     * @return array
+     */
+    protected static function getUrl($url) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
         curl_close($ch);
+        return $response;
     }
-    $str = '';
-    $str_arr= array();
-    foreach($params as $key => $value) {
-        $str_arr[] = urlencode($key)."=".urlencode($value);
+
+    /**
+     * @return string
+     */
+    protected static function getRandomToken() {
+        $min = 100000;
+        $max = 900000;
+        $tk1 = mt_rand($min, $max);
+        $tk2 = mt_rand($min, $max);
+        return $tk1 . "|" . $tk2;
     }
-    if(!empty($str_arr))
-        $str = '?'.implode('&',$str_arr);
-    $finalUrl = $url.$str;
-    $ch = curl_init ($finalUrl);
-    curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $output = curl_exec($ch);
-    curl_close($ch);
-    return $output;
-  }
+
+    /**
+     * @param string $translation
+     * @return string
+     */
+    protected static function cleanTranslation($translation) {
+        $translation = str_replace("[", "", $translation);
+        $translation = str_replace("]", "", $translation);
+        $parts = explode('"', $translation);
+        for($i=0; $i<sizeof($parts); $i++) {
+            $part = $parts[$i];
+            if($part == ""
+                or $part == ","
+                or substr_count($part, ',,,') > 0
+                or substr_count($part, 'true') > 0
+                or substr_count($part, 'false') > 0) 
+                    unset($parts[$i]);
+        }
+        return array_values($parts);
+    }
 
 }
-?>
