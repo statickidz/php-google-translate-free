@@ -11,6 +11,6 @@ if($translation != '') {
 	$response->status = true;
 	$response->translation = $translation;
 } else {
-    $response->status = false;
+	$response->status = false;
 }
 echo json_encode($response);
