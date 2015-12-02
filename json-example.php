@@ -1,3 +1,5 @@
+<?php
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');  
 header('Content-Type: application/json');
@@ -7,7 +9,7 @@ $translation = $translator->translate($_GET['q']);
 $response = new stdClass();
 if($translation != '') {
 	$response->status = true;
-    $response->translation = $translation;
+	$response->translation = $translation;
 } else {
     $response->status = false;
 }
