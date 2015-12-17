@@ -11,61 +11,78 @@ class GoogleTranslate
      */
     public static function translate($source, $target, $text) {
 
-        // construct full request URL
-        $fullUrl = "https://translate.google.com/translate_a/single?"
-        . "client=t&"
-        . "sl=" . $source
-        . "&tl=" . $target
-        . "&hl=" . $target
-        . "&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t"
-        . "&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0"
-        . "&tk=" . self::getRandomToken()
-        . "&q=" . urlencode($text);
+        // Request translation
+        $response = self::requestTranslation($source, $target, $text);
 
-        // get url content
-        $response = self::getUrl($fullUrl);
+        // Get translation text
+        $response = self::getStringBetween(";TRANSLATED_TEXT='", "';", strval($response));
 
-        // clean translation
-        $cleanTranslation = self::cleanTranslation($response);
+        // Clean translation
+        $response = self::cleanTranslation($response);
 
-        // extract translation info
-        $dotCount = substr_count($text, ".");
-        $result = "";
-        if($dotCount == 0) {
-            $result .= $cleanTranslation[0];
-        } else {
-            for($i=0; $i<=$dotCount*2; $i++) {
-                if($cleanTranslation[$i] != $source)
-                    $result .= $cleanTranslation[$i];
-                $i = $i + 1;
-            }
-        }
+        return $response;
+    }
+
+    /**
+     * @param string $source
+     * @param string $target
+     * @param string $text
+     * @return array
+     */
+    protected static function requestTranslation($source, $target, $text) {
+
+        // Google translate URL
+        $url = "https://translate.google.com/";
+
+        $fields = array(
+            'sl' => urlencode($source),
+            'tl' => urlencode($target),
+            'js' => urlencode('n'),
+            'prev' => urlencode('_t'),
+            'hl' => urlencode($source),
+            'ie' => urlencode('UTF-8'),
+            'text' => urlencode($text),
+            'file' => urlencode(''),
+            'edit-text' => urlencode('')
+        );
+
+        // URL-ify the data for the POST
+        $fields_string = "";
+        foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+            rtrim($fields_string, '&');
+
+        // Open connection
+        $ch = curl_init();
+
+        // Set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute post
+        $result = curl_exec($ch);
+
+        // Close connection
+        curl_close($ch);
 
         return $result;
     }
 
     /**
-     * @param string $url
-     * @return array
-     */
-    protected static function getUrl($url) {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-        return $response;
-    }
-
-    /**
+     * @param string $start
+     * @param string $end
+     * @param string $string
      * @return string
      */
-    protected static function getRandomToken() {
-        $min = 100000;
-        $max = 900000;
-        $tk1 = mt_rand($min, $max);
-        $tk2 = mt_rand($min, $max);
-        return $tk1 . "|" . $tk2;
+    protected static function getStringBetween($start = "",$end = "", $string){
+        $temp = strpos($string, $start) + strlen($start);
+        $result = substr($string, $temp, strlen($string));
+        $dd = strpos($result, $end);
+        if($dd == 0){
+            $dd = strlen($result);
+        }
+        return substr($result, 0 ,$dd);
     }
 
     /**
@@ -73,19 +90,10 @@ class GoogleTranslate
      * @return string
      */
     protected static function cleanTranslation($translation) {
-        $translation = str_replace("[", "", $translation);
-        $translation = str_replace("]", "", $translation);
-        $parts = explode('"', $translation);
-        for($i=0; $i<sizeof($parts); $i++) {
-            $part = $parts[$i];
-            if($part == ""
-                or $part == ","
-                or substr_count($part, ',,,') > 0
-                or substr_count($part, 'true') > 0
-                or substr_count($part, 'false') > 0) 
-                    unset($parts[$i]);
-        }
-        return array_values($parts);
+        $translation = preg_replace("#(\\\x[0-9A-Fa-f]{2})#e", "chr(hexdec('\\1'))", $translation);
+        $translation = str_replace("<br>", " ", $translation);
+        $translation = str_replace("  ", " ", $translation);
+        return $translation;
     }
 
 }
