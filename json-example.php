@@ -8,7 +8,7 @@ $translation = GoogleTranslate::translate($_GET['source'],$_GET['target'], $_GET
  
 $response = new stdClass();
 if($translation != '') {
-  $response->status = true;
+    $response->status = true;
     $response->translation = $translation;
 } else {
     $response->status = false;
