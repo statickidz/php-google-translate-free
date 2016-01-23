@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * GoogleTranslate.class.php
+ *
+ * Class to talk with Google Translator.
+ *
+ * @category   Translation
+ * @author     Adrián Barrio Andrés
+ * @copyright  2016 Adrián Barrio Andrés
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    1.0
+ * @link       https://statickidz.com/
+ */
+
 class GoogleTranslate
 {
 
@@ -15,10 +28,7 @@ class GoogleTranslate
         $response = self::requestTranslation($source, $target, $text);
 
         // Get translation text
-        $response = self::getStringBetween(";TRANSLATED_TEXT='", "';", strval($response));
-
-        // Clean translation
-        $response = self::cleanTranslation($response);
+        $response = self::getStringBetween("onmouseout=\"this.style.backgroundColor='#fff'\">", "</span></div>", strval($response));
 
         return $response;
     }
@@ -60,6 +70,8 @@ class GoogleTranslate
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
 
         // Execute post
@@ -85,17 +97,6 @@ class GoogleTranslate
             $dd = strlen($result);
         }
         return substr($result, 0 ,$dd);
-    }
-
-    /**
-     * @param string $translation
-     * @return string
-     */
-    protected static function cleanTranslation($translation) {
-        $translation = preg_replace("#(\\\x[0-9A-Fa-f]{2})#e", "chr(hexdec('\\1'))", $translation);
-        $translation = str_replace("<br>", " ", $translation);
-        $translation = str_replace("  ", " ", $translation);
-        return $translation;
     }
 
 }
