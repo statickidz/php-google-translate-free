@@ -30,6 +30,9 @@ class GoogleTranslate
         // Get translation text
         $response = self::getStringBetween("onmouseout=\"this.style.backgroundColor='#fff'\">", "</span></div>", strval($response));
 
+        // Clean translation
+        $response = self::clean($response);
+
         return $response;
     }
 
@@ -89,7 +92,7 @@ class GoogleTranslate
      * @param string $string
      * @return string
      */
-    protected static function getStringBetween($start = "",$end = "", $string){
+    protected static function getStringBetween($start = "",$end = "", $string) {
         $temp = strpos($string, $start) + strlen($start);
         $result = substr($string, $temp, strlen($string));
         $dd = strpos($result, $end);
@@ -97,6 +100,17 @@ class GoogleTranslate
             $dd = strlen($result);
         }
         return substr($result, 0 ,$dd);
+    }
+
+    /**
+     * @param string
+     * @return string
+     */
+    protected static function clean($str) {
+        $str = strip_tags($str);
+        $str = trim($str);
+        $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
+        return $str;
     }
 
 }
