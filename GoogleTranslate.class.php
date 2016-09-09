@@ -28,12 +28,12 @@ class GoogleTranslate
         $response = self::requestTranslation($source, $target, $text);
 
         // Get translation text
-        $response = self::getStringBetween("onmouseout=\"this.style.backgroundColor='#fff'\">", "</span></div>", strval($response));
+        //$response = self::getStringBetween("onmouseout=\"this.style.backgroundColor='#fff'\">", "</span></div>", strval($response));
 
         // Clean translation
-        $response = self::clean($response);
+        $translation = self::getSentencesFromJSON($response);
 
-        return $response;
+        return $translation;
     }
 
     /**
@@ -45,24 +45,21 @@ class GoogleTranslate
     protected static function requestTranslation($source, $target, $text) {
 
         // Google translate URL
-        $url = "https://translate.google.com/";
+        $url = "https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
 
         $fields = array(
             'sl' => urlencode($source),
             'tl' => urlencode($target),
-            'js' => urlencode('n'),
-            'prev' => urlencode('_t'),
-            'hl' => urlencode($source),
-            'ie' => urlencode('UTF-8'),
-            'text' => urlencode($text),
-            'file' => urlencode(''),
-            'edit-text' => urlencode('')
+            'q' => urlencode($text)
         );
 
         // URL-ify the data for the POST
         $fields_string = "";
-        foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-            rtrim($fields_string, '&');
+        foreach($fields as $key=>$value) {
+            $fields_string .= $key.'='.$value.'&';
+        }
+        
+        rtrim($fields_string, '&');
 
         // Open connection
         $ch = curl_init();
@@ -75,7 +72,7 @@ class GoogleTranslate
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1');
 
         // Execute post
         $result = curl_exec($ch);
@@ -86,31 +83,20 @@ class GoogleTranslate
         return $result;
     }
 
-    /**
-     * @param string $start
-     * @param string $end
-     * @param string $string
-     * @return string
-     */
-    protected static function getStringBetween($start = "",$end = "", $string) {
-        $temp = strpos($string, $start) + strlen($start);
-        $result = substr($string, $temp, strlen($string));
-        $dd = strpos($result, $end);
-        if($dd == 0){
-            $dd = strlen($result);
-        }
-        return substr($result, 0 ,$dd);
-    }
 
     /**
-     * @param string
+     * @param string $json
      * @return string
      */
-    protected static function clean($str) {
-        $str = strip_tags($str);
-        $str = trim($str);
-        $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-        return $str;
+    protected static function getSentencesFromJSON($json) {
+        $sentencesArray = json_decode($json, true);
+        $sentences = "";
+
+        foreach ($sentencesArray["sentences"] as $s) {
+            $sentences .= $s["trans"];
+        }
+
+        return $sentences;
     }
 
 }
