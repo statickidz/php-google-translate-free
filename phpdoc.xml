@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpdoc>
+<title>Statickidz GoogleTranslate library for PHP - Documentation</title>
+<parser>
+<target>docs</target>
+<visibility>public</visibility>
+</parser>
+<transformer>
+<target>docs</target>
+</transformer>
+<transformations>
+<template name="new-black" />
+</transformations>
+<files>
+<directory>src</directory>
+</files>
+</phpdoc>
