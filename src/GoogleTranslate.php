@@ -121,7 +121,7 @@ class GoogleTranslate
         $sentences = "";
 
         foreach ($sentencesArray["sentences"] as $s) {
-            $sentences .= $s["trans"];
+            $sentences .= isset($s["trans"]) ? $s["trans"] : '';
         }
 
         return $sentences;
