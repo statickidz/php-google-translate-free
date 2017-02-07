@@ -2,6 +2,7 @@
     "name": "statickidz/php-google-translate-free",
     "type": "library",
     "description": "Google Translate Free library for PHP",
+    "version": "1.0.0",
     "keywords": [
     "statickidz",
     "google",
