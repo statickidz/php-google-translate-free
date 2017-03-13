@@ -77,6 +77,9 @@ class GoogleTranslate
             'q' => urlencode($text)
         );
 
+        if(strlen($fields['q'])>=5000)
+            throw new \Exception("Maximum number of characters exceeded: 5000");
+        
         // URL-ify the data for the POST
         $fields_string = "";
         foreach ($fields as $key => $value) {
