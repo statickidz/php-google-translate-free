@@ -1,8 +1,14 @@
 <?php
 require_once ('vendor/autoload.php');
+
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+
 use \Statickidz\GoogleTranslate;
 
-class TranslateTest extends PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testTranslate()
