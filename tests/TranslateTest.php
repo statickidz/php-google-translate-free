@@ -18,7 +18,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $text = 'verdadero';
 
         $trans = new GoogleTranslate();
-        $result = $trans->translate($source, $target, $text);
+        $result = $trans->translateGhost($source, $target, $text);
 
         $this->assertEquals($result, 'true');
     }
