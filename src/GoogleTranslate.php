@@ -122,6 +122,9 @@ class GoogleTranslate
     {
         $sentencesArray = json_decode($json, true);
         $sentences = "";
+        
+        if(!$sentencesArray)
+            throw new \Exception("Google detected unusual traffic from your computer network, try again later (2 - 48 hours)");
 
         foreach ($sentencesArray["sentences"] as $s) {
             $sentences .= isset($s["trans"]) ? $s["trans"] : '';
