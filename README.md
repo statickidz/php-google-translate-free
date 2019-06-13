@@ -13,7 +13,7 @@ Or edit your project's `composer.json` to require `statickidz/php-google-transla
 
 ```json
 "require": {
-    "statickidz/php-google-translate-free": "^1.0"
+    "statickidz/php-google-translate-free": "^1.1.0"
 }
 ```
 
@@ -25,14 +25,10 @@ use \Statickidz\GoogleTranslate;
 
 $source = 'es';
 $target = 'en';
-$text = 'verdadero';
+$text = 'buenos días';
 
 $trans = new GoogleTranslate();
 $result = $trans->translate($source, $target, $text);
 
 echo $result;
 ```
-
-## Demo
-
-Live example here: https://statickidz.com/proyectos/traductor-google-api-php-gratis/
