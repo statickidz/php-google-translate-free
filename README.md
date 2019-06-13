@@ -13,7 +13,7 @@ Or edit your project's `composer.json` to require `statickidz/php-google-transla
 
 ```json
 "require": {
-    "statickidz/php-google-translate-free": "^1.1.0"
+    "statickidz/php-google-translate-free": "^1.1.1"
 }
 ```
 
