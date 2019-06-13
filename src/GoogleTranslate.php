@@ -42,9 +42,6 @@ class GoogleTranslate
         // Request translation
         $response = self::requestTranslation($source, $target, $text);
 
-        // Get translation text
-        // $response = self::getStringBetween("onmouseout=\"this.style.backgroundColor='#fff'\">", "</span></div>", strval($response));
-
         // Clean translation
         $translation = self::getSentencesFromJSON($response);
 

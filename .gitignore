@@ -9,6 +9,7 @@
 .project
 
 # Excluding extra files and logs
+composer.phar
 composer.lock
 *_log
 *.log
