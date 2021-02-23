@@ -173,6 +173,9 @@ class GoogleTranslate
     protected static function requestTranslation($source, $target, $text)
     {
 
+        if(strlen($text)>=5000)
+            throw new \Exception("Maximum number of characters exceeded: 5000");
+        
         // Google translate URL
         $url = "https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
 
@@ -182,9 +185,6 @@ class GoogleTranslate
             'q' => urlencode($text)
         );
 
-        if(strlen($fields['q'])>=5000)
-            throw new \Exception("Maximum number of characters exceeded: 5000");
-        
         // URL-ify the data for the POST
         $fields_string = "";
         foreach ($fields as $key => $value) {
