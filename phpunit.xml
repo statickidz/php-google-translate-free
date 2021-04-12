@@ -10,7 +10,6 @@
     </testsuite>
   </testsuites>
   <logging>
-    <log type="json" target="build/report_unit_test_json.json" />
     <log type="junit" target="build/report_unit_test_junit.xml" />
   </logging>
 </phpunit>
