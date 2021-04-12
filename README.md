@@ -1,4 +1,5 @@
 # PHP GoogleTranslate free [![Build Status](https://travis-ci.org/statickidz/php-google-translate-free.svg?branch=master)](https://travis-ci.org/statickidz/php-google-translate-free)
+
 Simple PHP library for talking to Google's Translate API for free.
 
 Eliminates IP request limitations
@@ -15,10 +16,9 @@ Or edit your project's `composer.json` to require `statickidz/php-google-transla
 
 ```json
 "require": {
-    "statickidz/php-google-translate-free": "^1.1.1"
+    "statickidz/php-google-translate-free": "^1.2.0"
 }
 ```
-Requires installing tor (https://www.torproject.org/).
 
 ## Usage
 
@@ -31,7 +31,8 @@ $target = 'en';
 $text = 'buenos días';
 
 $trans = new GoogleTranslate();
-$result = $trans->translateGhost($source, $target, $text);
+$result = $trans->translate($source, $target, $text);
 
+// Good morning
 echo $result;
 ```
