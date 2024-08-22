@@ -1,4 +1,5 @@
-# PHP GoogleTranslate free
+# PHP GoogleTranslate free ![tests workflow](https://github.com/github/docs/actions/workflows/tests.yml/badge.svg)
+
 
 Simple PHP library for talking to Google's Translate API for free.
 
