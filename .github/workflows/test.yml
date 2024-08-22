@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Composer update
+        run: composer self-update --2
+
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
