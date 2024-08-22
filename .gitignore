@@ -12,3 +12,5 @@
 composer.phar
 *_log
 *.log
+.phpunit.result.cache
+.phpunit.cache

@@ -1,53 +1,50 @@
 {
-    "name": "statickidz/php-google-translate-free",
-    "type": "library",
-    "description": "Google Translate Free library for PHP",
-    "version": "1.2.1",
-    "keywords": [
-        "statickidz",
-        "google",
-        "translator",
-        "translate",
-        "api",
-        "free",
-        "siegsb"
-    ],
-    "homepage": "https://github.com/statickidz/php-google-translate-free/",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Adrián Barrio Andrés",
-            "email": "statickidz@gmail.com",
-            "homepage": "https://statickidz.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Paris Niarfe Baltazar Salguero",
-            "email": "sieg.sb@gmail.com",
-            "homepage": "http://www.pbaltazar.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/statickidz/php-google-translate-free/issues",
-        "source": "https://github.com/statickidz/php-google-translate-free/releases"
+  "name": "statickidz/php-google-translate-free",
+  "type": "library",
+  "description": "Google Translate Free library for PHP",
+  "keywords": [
+    "statickidz",
+    "google",
+    "translator",
+    "translate",
+    "api",
+    "free",
+    "siegsb"
+  ],
+  "homepage": "https://github.com/statickidz/php-google-translate-free/",
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "Adrián Barrio Andrés",
+      "email": "statickidz@gmail.com",
+      "homepage": "https://statickidz.com",
+      "role": "Developer"
     },
-    "require": {
-        "php": ">=5.4"
-    },
-    "require-dev": {
-        "phpunit/phpunit": ">=4.8",
-        "squizlabs/php_codesniffer": "^2.3",
-        "phpdocumentor/phpdocumentor": "2.*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Statickidz\\": "src/"
-        }
-    },
-    "scripts": {
-        "test": "phpunit",
-        "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
-        "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
+    {
+      "name": "Paris Niarfe Baltazar Salguero",
+      "email": "sieg.sb@gmail.com",
+      "homepage": "http://www.pbaltazar.com",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "issues": "https://github.com/statickidz/php-google-translate-free/issues",
+    "source": "https://github.com/statickidz/php-google-translate-free/releases"
+  },
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=11.3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Statickidz\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --configuration phpunit.xml --coverage-text",
+    "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
+    "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
+  }
 }

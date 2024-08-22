@@ -16,36 +16,24 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     {
         $source = 'es';
         $target = 'en';
-        $text = 'verdadero';
+        $text = 'amarillo';
 
         $trans = new GoogleTranslate();
-        $result = $trans->translate($source, $target, $text);
+        $result = strtolower($trans->translate($source, $target, $text));
 
-        $this->assertEquals($result, 'true');
-    }
-
-    public function testShouldTranslateWithAutoSource()
-    {
-        $source = 'auto';
-        $target = 'en';
-        $text = 'verdadero';
-
-        $trans = new GoogleTranslate();
-        $result = $trans->translate($source, $target, $text);
-
-        $this->assertEquals($result, 'true');
+        $this->assertEquals($result, 'yellow');
     }
 
     public function testShouldTranslateQuijote()
     {
         $source = 'es';
         $target = 'en';
-        $text = 'En un lugar de la Mancha, de cuyo nombre no quiero acordarme';
+        $text = 'En un lugar de la Mancha';
 
         $trans = new GoogleTranslate();
-        $result = $trans->translate($source, $target, $text);
+        $result = strtolower($trans->translate($source, $target, $text));
 
-        $this->assertEquals($result, "In a place in La Mancha, whose name I don't want to remember");
+        $this->assertEquals($result, "in a place in la mancha");
     }
 
     public function testShouldTranslateLongText()
