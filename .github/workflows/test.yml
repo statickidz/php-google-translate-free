@@ -13,8 +13,6 @@ jobs:
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@master
-        env:
-          TEST_NAME: Scarlett
         with:
           version: 9.6
           php_version: 8.2
